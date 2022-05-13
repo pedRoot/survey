@@ -1,10 +1,10 @@
-import { validationResult } from "express-validator";
+import { validationResult } from 'express-validator';
 
-export function manageResponse(req, res, next) {
-  try {
-    validationResult(req).throw();
-    next();
-  } catch (err) {
-    res.status(422).json({ errors: err.mapped() });
+export const manageResponse = (req, res, next) => {
+  const errors = validationResult(req);
+  if (errors.isEmpty()) {
+    return next();
   }
+
+  return res.status(422).json({ errors: errors.mapped() });
 };

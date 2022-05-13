@@ -1,59 +1,48 @@
-import User from "../models/User";
-import Role from "../models/Role";
-import jws from "jsonwebtoken";
-import config from "../config/config";
-import argon2 from "argon2";
+import argon2 from 'argon2';
+import jws from 'jsonwebtoken';
 
-export const signup = async (req, res) => {
-  try {
-    const { email, password, roles } = req.body;
-
-    const user = new User({
-      email,
-      password: await argon2.hash(password),
-    });
-
-    if (roles) {
-      const role = await Role.find({ name: { $in: roles } });
-
-      if (role) {
-        user.role = role.map((role) => role.id);
-      }
-    } else {
-      const role = await Role.findOne({ name: "user" });
-      user.role = [role.id];
-    }
-
-    const newUser = await user.save();
-
-    res.status(201).json();
-  } catch (error) {
-    res.status(500).json({ message: "User not created...!!!" });
-    console.error("Error in add User: ", error.name + ": " + error.message);
-  }
-};
+import User from '../models/User';
+import Role from '../models/Role';
+import config from '../config/config';
 
 export const signin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "User not found...!!!" });
-
-    if (!user.isActive)
-      res.status(403).json({ message: "User not active...!!!" });
+    if (!user) throw 'Credentials invalids';
+    if (!user.isActive) throw 'User inactive';
 
     const isValidPassword = await argon2.verify(user.password, password);
-    if (!isValidPassword)
-      return res.status(400).json({ message: "Credentials not valid...!!!" });
+    if (!isValidPassword) throw 'Credentials invalids';
 
-    const token = jws.sign({ id: user.id }, config.SECRET, {
-      expiresIn: 86400, //24 horas
+    const access_token = jws.sign({ id: user.id }, config.SECRET, {
+      expiresIn: 86400,
     });
 
-    res.status(200).json({ token });
+    res.status(200).json({ access_token });
   } catch (error) {
-    res.status(500).json({ message: "User not verify...!!!" });
-    console.error("Error in login User: ", error.name + ": " + error.message);
+    res.status(403).json({ error });
+  }
+};
+
+export const signup = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (user) throw 'previously registered';
+
+    const role = await Role.findOne({ name: 'user' }, '_id');
+
+    await new User({
+      email: email,
+      password: await argon2.hash(password),
+      role: [role._id],
+    }).save();
+
+    res.status(201).json({ result: 'successful process' });
+  } catch (error) {
+    res.status(400).json({ error });
   }
 };

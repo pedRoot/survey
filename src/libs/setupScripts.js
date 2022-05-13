@@ -34,13 +34,11 @@ export const createUser = async () => {
 
     role = await Role.findOne({ name: "user" }, "_id");
 
-    await Promise.all([
-      new User({
-        email: "pedrotorres@outlook.com",
-        password: await argon2.hash("enter"),
-        role: [role._id],
-      }).save(),
-    ]);
+    await new User({
+      email: "pedrotorres@outlook.com",
+      password: await argon2.hash("enter"),
+      role: [role._id],
+    }).save();
   } catch (error) {
     console.log(error);
   }

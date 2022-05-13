@@ -2,7 +2,7 @@
 @port = 8080
 @host = {{hostname}}:{{port}}
 @contentType = application/json
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzVlN2U4MDE2MWQ3ODU2NmEyNjdlYyIsImlhdCI6MTY1MTg5NTkxOCwiZXhwIjoxNjUxOTgyMzE4fQ.uK-KQYzAfpw0QYn2upaowFtEtHUAKrmZPgKBYeZ6p4Y
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzYxYjgzY2NlYTdhNzk0YTYzNWVmNyIsImlhdCI6MTY1MTkwNzkwNywiZXhwIjoxNjUxOTk0MzA3fQ.H0YbB9E3fXnslG6dtXtqxvZs3q1dqRxgsrXeoKFE7fw
 
 # GET /home
 GET http://{{host}}/ HTTP/1.1
@@ -10,15 +10,13 @@ GET http://{{host}}/ HTTP/1.1
 
 # POST /users
 # @name login
-POST http://{{host}}/api/v1/auth/signin HTTP/1.1
+POST http://{{host}}/api/v1/auth/signup HTTP/1.1
 Content-Type: {{contentType}}
 
 {
     "email": "pedrotorres@outlook.com",
     "password": "enter"
 }
-
-@jwtoken = {{login.response.body.*}}
 
 GET HTTP://{{host}}/api/v1/users/ HTTP/1.1
 x-access-token: {{token}}

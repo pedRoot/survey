@@ -1,16 +1,15 @@
-import { body } from "express-validator"
+import { body } from "express-validator";
 
 export const rulesValidateEdit = [
-  body('email', 'Email must contain a valid email address')
+  body("email", "Email must contain a valid email address")
     .isEmail()
-    .notEmpty()
-    .bail(),
-  body('wasSelected', 'Must contain a valid value')
+    .notEmpty(),
+  body("wasSelected", "Must contain a valid value")
     .optional()
     .isBoolean()
     .toBoolean(),
-   body('isActive', 'Must contain a valid value')
+  body("isActive", "Must contain a valid value")
     .optional()
     .isBoolean()
-    .toBoolean()
-]
+    .toBoolean(),
+];
