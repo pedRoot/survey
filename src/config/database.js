@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import conf from "./config-env";
+import mongoose from 'mongoose';
+import conf from './config-env';
 
 mongoose
   .connect(
@@ -9,7 +9,7 @@ mongoose
       useUnifiedTopology: true,
     }
   )
-  .then((db) => console.log("DB is connect :) "))
+  .then((db) => console.log(`DB is connect :) `))
   .catch((e) => console.log(e));
 
 export default mongoose;

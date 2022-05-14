@@ -14,8 +14,6 @@
     "@babel/core": "^7.17.10",
     "@babel/node": "^7.17.10",
     "@babel/preset-env": "^7.17.10",
-    "@sentry/node": "^6.19.7",
-    "@sentry/tracing": "^6.19.7",
     "argon2": "^0.28.5",
     "bcryptjs": "^2.4.3",
     "core-js": "^3.22.4",

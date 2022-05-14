@@ -10,7 +10,7 @@ export const signin = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) throw 'Credentials invalids';
+    if (!user) throw 'Not found';
     if (!user.isActive) throw 'User inactive';
 
     const isValidPassword = await argon2.verify(user.password, password);
@@ -41,7 +41,7 @@ export const signup = async (req, res) => {
       role: [role._id],
     }).save();
 
-    res.status(201).json({ result: 'successful process' });
+    res.status(201).json('proccess successfull');
   } catch (error) {
     res.status(400).json({ error });
   }
